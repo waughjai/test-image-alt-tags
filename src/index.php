@@ -11,16 +11,41 @@
     use WaughJ\ImageAltTag\ImageAltTagList;
     use function WaughJ\TestHashItem\TestHashItemExists;
 
-    $loader = new \Twig\Loader\FilesystemLoader( 'templates' );
+/*
+    $captcha = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
+    $secretKey = "6LdgGqIUAAAAAPkIgpUKT6X9O-PaWnPsuqd5A-lb";
+    $ip = $_SERVER[ 'REMOTE_ADDR' ];
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = array('secret' => $secretKey, 'response' => $captcha);
+  $options = array(
+    'http' => array(
+      'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+      'method'  => 'POST',
+      'content' => http_build_query($data)
+    )
+  );
+  $context  = stream_context_create($options);
+  $response = file_get_contents($url, false, $context);
+  $responseKeys = json_decode($response,true);
+  header('Content-type: application/json');
+  if($responseKeys["success"]) {
+    echo json_encode(array('success' => 'true'));
+  } else {
+    echo json_encode(array('success' => 'false'));
+  }*/
+
+
+
+    $loader = new \Twig\Loader\FilesystemLoader( '../src/templates' );
     $twig = new \Twig\Environment
     (
         $loader,
-        [ 'cache' => '.cache' ]
+        [ 'cache' => '../src/.cache' ]
     );
 
-    if ( TestHashItemExists( $_GET, 'url', null ) !== null )
+    if ( TestHashItemExists( $_POST, 'url', null ) !== null )
     {
-        $url = $_GET[ 'url' ];
+        $url = $_POST[ 'url' ];
 		$uri = new URI( $url );
 		if ( !$uri->getScheme() )
 		{

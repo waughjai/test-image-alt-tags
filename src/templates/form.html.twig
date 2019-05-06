@@ -6,9 +6,41 @@
             <h1 class="form-nom">Check the Alt Tags in a Website's Images</h1>
             <h2 class="form-nom2">Enter a Home Page URL</h2>
         </header>
-        <form class="form-form">
-            <input type="text" name="url" required="true">
-            <input type="submit" value="Submit">
+        <form class="form-form" id="form-form">
+            <input id="form-url" type="text" name="url" required="true">
+            <input type="submit" value="Submit" id="form-submit">
         </form>
     </article>
+
+<script src="https://www.google.com/recaptcha/api.js?render=6LdgGqIUAAAAAHpdLVgWjqNXRnedKs6eYt3pa8OK"></script>
+<script>
+    var form = document.getElementById( 'form-form' );
+    form.addEventListener
+    (
+        'submit',
+        function( e )
+        {
+            grecaptcha.ready
+            (
+                function()
+                {
+                    grecaptcha.execute('6LdgGqIUAAAAAHpdLVgWjqNXRnedKs6eYt3pa8OK', {action: 'homepage'}).then
+                    (
+                        function( token )
+                        {
+                            var url = document.getElementById( 'form-url' ).value;
+                            var hidden_input = document.createElement( 'input' );
+                            hidden_input.setAttribute( 'type', 'hidden' );
+                            hidden_input.setAttribute( 'name', 'g-recaptcha-response' );
+                            hidden_input.setAttribute( 'value', token );
+                            form.append( hidden_input );
+                        }
+                    );
+                }
+            );
+        },
+        false
+    );
+</script>
+
 {% endblock %}
