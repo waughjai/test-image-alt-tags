@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .red
+        {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    {% for website in websites %}
+        <h2>{{ website.url }}</h2>
+        <ul>
+        {% for alt in website.alts %}
+            {% if alt.testIsValid() %}
+                <li>{{ alt.src }}: {{ alt.value }}</li>
+            {% else %}
+                <li class="red">{{ alt.src }}: [NO ALT]</li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    {% endfor %}
+</body>
+</html>

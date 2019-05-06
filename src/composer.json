@@ -1,0 +1,15 @@
+{
+    "name": "waughj/test-website-image-alt",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Jaimeson Waugh",
+            "email": "waughjai@gmail.com"
+        }
+    ],
+    "require": {
+        "waughj/image-alt-tag": "^0.1.0",
+        "waughj/webpage-links-list": "^0.2.0",
+        "twig/twig": "^2.9"
+    }
+}
