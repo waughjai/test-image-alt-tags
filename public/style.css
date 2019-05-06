@@ -1,0 +1,55 @@
+.red
+{
+    color: red;
+}
+
+.left
+{
+    text-align: left;
+}
+
+body
+{
+    font-family: sans-serif;
+}
+
+.res-i
+{
+    margin-bottom: 3em;
+}
+
+.res-i-nom
+{
+    border-bottom: 1px solid #000;
+}
+
+.res-i-tabl,
+.res-i-tabl td,
+.res-i-tabl th
+{
+    border: 1px solid #000;
+    border-collapse: collapse;
+}
+
+.res-i-tabl thead th
+{
+    background-color: #000;
+    color: #fff;
+}
+
+.res-i-tabl td,
+.res-i-tabl th
+{
+    padding: 0.25em 0.5em;
+}
+
+.res-foot,
+.form
+{
+    text-align: center;
+}
+
+.form-form
+{
+    display: inline-block;
+}

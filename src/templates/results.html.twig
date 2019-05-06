@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block page %}
+    <article class="res">
+        <h1 class="nom res-nom">Image Alt Tags for {{ home }}</h1>
+        {% for website in websites %}
+            <div class="res-i">
+                <h2 class="res-i-nom">{{ website.url }}</h2>
+                <table class="res-i-tabl">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Alt Tag</th>
+                        </tr>
+                    </thead>
+                    {% for alt in website.alts %}
+                        {% if alt.testIsValid() %}
+                            <tr>
+                                <th class="left">{{ alt.src }}</th>
+                                <td>{{ alt.value }}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <th class="red left">{{ alt.src }}</th>
+                                <td class="red">[NO ALT]</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </div>
+        {% endfor %}
+
+        <footer class="res-foot">
+            <a href="index.php">Try another website</a>
+        </footer>
+
+    </article>
+{% endblock %}
