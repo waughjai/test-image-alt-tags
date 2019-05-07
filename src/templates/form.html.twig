@@ -6,9 +6,10 @@
             <h1 class="form-nom">Check the Alt Tags in a Website's Images</h1>
             <h2 class="form-nom2">Enter a Home Page URL</h2>
         </header>
-        <form class="form-form" id="form-form">
+        <form class="form-form" id="form-form" method="post">
             <input id="form-url" type="text" name="url" required="true">
             <input type="submit" value="Submit" id="form-submit">
+            <input type="hidden" name="recaptcha_response" id="recaptchaResponse">
         </form>
     </article>
 
@@ -28,12 +29,8 @@
                     (
                         function( token )
                         {
-                            var url = document.getElementById( 'form-url' ).value;
-                            var hidden_input = document.createElement( 'input' );
-                            hidden_input.setAttribute( 'type', 'hidden' );
-                            hidden_input.setAttribute( 'name', 'g-recaptcha-response' );
-                            hidden_input.setAttribute( 'value', token );
-                            form.append( hidden_input );
+                            var recaptchaResponse = document.getElementById('recaptchaResponse');
+                            recaptchaResponse.value = token;
                         }
                     );
                 }
