@@ -16,6 +16,7 @@
         error_reporting( E_NONE );
     }
 
+    chdir( '../src' );
     require_once( 'vendor/autoload.php' );
 	use Enrise\Uri;
     use WaughJ\WebpageLinksList\WebpageLinksList;
@@ -69,7 +70,7 @@
 
     function testRecaptchaSuccess( string $token ) : bool
     {
-        $secretKey = "6LdgGqIUAAAAAPkIgpUKT6X9O-PaWnPsuqd5A-lb";
+        $secretKey = file_get_contents( '.gskey' );
         $ip = $_SERVER[ 'REMOTE_ADDR' ];
         $url = 'https://www.google.com/recaptcha/api/siteverify';
         $data = [ 'secret' => $secretKey, 'response' => $token ];
