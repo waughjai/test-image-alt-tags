@@ -3,9 +3,9 @@
 {% block page %}
     <article class="res">
         <h1 class="nom res-nom">Image Alt Tags for {{ home }}</h1>
-        {% for website in websites %}
+        {% for webpage in webpages %}
             <div class="res-i">
-                <h2 class="res-i-nom">{{ website.url }}</h2>
+                <h2 class="res-i-nom">{{ webpage.url }}</h2>
                 <table class="res-i-tabl">
                     <thead>
                         <tr>
@@ -13,7 +13,7 @@
                             <th>Alt Tag</th>
                         </tr>
                     </thead>
-                    {% for alt in website.alts %}
+                    {% for alt in webpage.alts %}
                         {% if alt.testIsValid() %}
                             <tr>
                                 <th class="left">{{ alt.src }}</th>
@@ -31,7 +31,7 @@
         {% endfor %}
 
         <footer class="res-foot">
-            <a href="index.php">Try another website</a>
+            <a href="index.php">Try another webpage</a>
         </footer>
 
     </article>

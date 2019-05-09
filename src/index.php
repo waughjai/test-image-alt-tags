@@ -1,91 +1,82 @@
 <?php
 
-    const DEBUG = true;
+declare( strict_types = 1 );
+namespace WAJAltTags;
 
-    // Turn off all errors.
-    if ( DEBUG )
+require_once( 'handle-errors.php' );
+require_once( 'vendor/autoload.php' ); // Load composer stuff.
+require_once( 'test-recaptcha.php' );
+use Enrise\Uri;
+use WaughJ\WebpageLinksList\WebpageLinksList;
+use WaughJ\ImageAltTag\ImageAltTagList;
+use function WaughJ\TestHashItem\TestHashItemExists;
+
+chdir( '../src' );
+echo generateContent();
+
+function generateContent()
+{
+    if ( testURLIsNotSet() )
     {
-        ini_set( 'display_errors', 1 );
-        ini_set( 'display_startup_errors', 1 );
-        error_reporting( E_ALL );
+        return generateTemplate( 'form.html.twig', [] );
     }
-    else
+    else if ( testRecaptcha() )
     {
-        ini_set( 'display_errors', 0 );
-        ini_set( 'display_startup_errors', 0 );
-        error_reporting( E_NONE );
-    }
-
-    chdir( '../src' );
-    require_once( 'vendor/autoload.php' );
-	use Enrise\Uri;
-    use WaughJ\WebpageLinksList\WebpageLinksList;
-    use WaughJ\ImageAltTag\ImageAltTagList;
-    use function WaughJ\TestHashItem\TestHashItemExists;
-
-    echo generateContent();
-    function generateContent()
-    {
-        $twig = new \Twig\Environment( new \Twig\Loader\FilesystemLoader( '../src/templates' ), [] );
-
-        if ( TestHashItemExists( $_POST, 'url', null ) !== null )
+        $url = getFormattedURL();
+        if ( testURLIsInvalid( $url ) )
         {
-            if ( TestHashItemExists( $_POST, 'recaptcha_response', null ) !== null && testRecaptchaSuccess( $_POST[ 'recaptcha_response' ] ) )
-            {
-                $url = $_POST[ 'url' ];
-        		$uri = new URI( $url );
-        		if ( !$uri->getScheme() )
-        		{
-        			$uri->setScheme( 'https' );
-        		}
-        		$url = $uri->getUri();
-
-                if ( !filter_var( $url, FILTER_VALIDATE_URL ) )
-                {
-                    return $twig->render( 'invalid_url.html.twig', [ 'url' => $url ] );
-                }
-
-                $links_list = new WebpageLinksList( $url, 250 );
-                $links_data = $links_list->getData();
-
-                $websites = [];
-                foreach ( $links_data as $link_url => $data )
-                {
-                    $alts = new ImageAltTagList( $data->raw_body );
-                    $alts = $alts->getImageAltTags();
-                    $websites[] = [ 'url' => $link_url, 'alts' => $alts ];
-                }
-                return $twig->render( 'results.html.twig', [ 'home' => $url, 'websites' => $websites ] );
-            }
-            else
-            {
-                return '';
-            }
+            return generateTemplate( 'invalid_url.html.twig', [ 'url' => $url ] );
         }
-        else
-        {
-            return $twig->render( 'form.html.twig', [] );
-        }
+        return generateTemplate( 'results.html.twig', [ 'home' => $url, 'webpages' => generateWebPages( $url ) ] );
     }
+    return '';
+}
 
-    function testRecaptchaSuccess( string $token ) : bool
+function generateWebPages( string $url ) : array
+{
+    $webpages = [];
+    $links = generateLinks( $url );
+    foreach ( $links as $link_url => $link_data )
     {
-        $secretKey = file_get_contents( '.gskey' );
-        $ip = $_SERVER[ 'REMOTE_ADDR' ];
-        $url = 'https://www.google.com/recaptcha/api/siteverify';
-        $data = [ 'secret' => $secretKey, 'response' => $token ];
-        $options =
-        [
-            'http' =>
-            [
-                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                'method'  => 'POST',
-                'content' => http_build_query($data)
-            ]
-        ];
-        $context = stream_context_create( $options );
-        $response = file_get_contents( $url, false, $context );
-        $responseKeys = json_decode( $response, true );
-        var_dump( $responseKeys );
-        return $responseKeys[ 'success' ] && $responseKeys[ 'score' ] >= 0.5;
+        $webpages[] = [ 'url' => $link_url, 'alts' => generateAltTagList( $link_data ) ];
     }
+    return $webpages;
+}
+
+function generateLinks( string $url ) : array
+{
+    $links_list = new WebpageLinksList( $url, 250 );
+    return $links_list->getData();
+}
+
+function generateAltTagList( $data )
+{
+    $alts = new ImageAltTagList( $data->raw_body );
+    return $alts->getImageAltTags();
+}
+
+function testURLIsNotSet() : bool
+{
+    return TestHashItemExists( $_POST, 'url', null ) === null;
+}
+
+function getFormattedURL() : string
+{
+	$uri = new URI( $_POST[ 'url' ] );
+	if ( !$uri->getScheme() )
+	{
+		$uri->setScheme( 'https' );
+	}
+	return $uri->getUri();
+}
+
+function testURLIsInvalid( string $url ) : bool
+{
+    return !filter_var( $url, FILTER_VALIDATE_URL );
+}
+
+function generateTemplate( string $temp, array $data )
+{
+    $twig = new \Twig\Environment( new \Twig\Loader\FilesystemLoader( '../src/templates' ), [] );
+    return $twig->render( $temp, $data );
+}
