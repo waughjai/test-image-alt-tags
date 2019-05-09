@@ -22,75 +22,69 @@
     use WaughJ\ImageAltTag\ImageAltTagList;
     use function WaughJ\TestHashItem\TestHashItemExists;
 
-/*
-    $captcha = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
-    $secretKey = "6LdgGqIUAAAAAPkIgpUKT6X9O-PaWnPsuqd5A-lb";
-    $ip = $_SERVER[ 'REMOTE_ADDR' ];
-    $url = 'https://www.google.com/recaptcha/api/siteverify';
-    $data = array('secret' => $secretKey, 'response' => $captcha);
-  $options = array(
-    'http' => array(
-      'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-      'method'  => 'POST',
-      'content' => http_build_query($data)
-    )
-  );
-  $context  = stream_context_create($options);
-  $response = file_get_contents($url, false, $context);
-  $responseKeys = json_decode($response,true);
-  header('Content-type: application/json');
-  if($responseKeys["success"]) {
-    echo json_encode(array('success' => 'true'));
-  } else {
-    echo json_encode(array('success' => 'false'));
-  }*/
-
-
-    $loader = new \Twig\Loader\FilesystemLoader( '../src/templates' );
-    $twig = new \Twig\Environment
-    (
-        $loader,
-        []
-    );
-
-    var_dump( $_POST );
-
-    if ( TestHashItemExists( $_POST, 'url', null ) !== null )
+    echo generateContent();
+    function generateContent()
     {
-        if ( TestHashItemExists( $_POST, 'recaptcha_response', null ) !== null )
+        $twig = new \Twig\Environment( new \Twig\Loader\FilesystemLoader( '../src/templates' ), [] );
+
+        if ( TestHashItemExists( $_POST, 'url', null ) !== null )
         {
-            $url = $_POST[ 'url' ];
-    		$uri = new URI( $url );
-    		if ( !$uri->getScheme() )
-    		{
-    			$uri->setScheme( 'https' );
-    		}
-    		$url = $uri->getUri();
-
-            if ( !filter_var( $url, FILTER_VALIDATE_URL ) )
+            if ( TestHashItemExists( $_POST, 'recaptcha_response', null ) !== null && testRecaptchaSuccess( $_POST[ 'recaptcha_response' ] ) )
             {
-                echo $twig->render( 'invalid_url.html.twig', [ 'url' => $url ] );
-                return;
+                $url = $_POST[ 'url' ];
+        		$uri = new URI( $url );
+        		if ( !$uri->getScheme() )
+        		{
+        			$uri->setScheme( 'https' );
+        		}
+        		$url = $uri->getUri();
+
+                if ( !filter_var( $url, FILTER_VALIDATE_URL ) )
+                {
+                    return $twig->render( 'invalid_url.html.twig', [ 'url' => $url ] );
+                }
+
+                $links_list = new WebpageLinksList( $url, 250 );
+                $links_data = $links_list->getData();
+
+                $websites = [];
+                foreach ( $links_data as $link_url => $data )
+                {
+                    $alts = new ImageAltTagList( $data->raw_body );
+                    $alts = $alts->getImageAltTags();
+                    $websites[] = [ 'url' => $link_url, 'alts' => $alts ];
+                }
+                return $twig->render( 'results.html.twig', [ 'home' => $url, 'websites' => $websites ] );
             }
-
-            $links_list = new WebpageLinksList( $url, 250 );
-            $links_data = $links_list->getData();
-
-            $websites = [];
-            foreach ( $links_data as $link_url => $data )
+            else
             {
-                $alts = new ImageAltTagList( $data->raw_body );
-                $alts = $alts->getImageAltTags();
-                $websites[] = [ 'url' => $link_url, 'alts' => $alts ];
+                return '';
             }
-            echo $twig->render( 'results.html.twig', [ 'home' => $url, 'websites' => $websites ] );
         }
         else
         {
-            echo 'baaah';
+            return $twig->render( 'form.html.twig', [] );
         }
     }
-    else
+
+    function testRecaptchaSuccess( string $token ) : bool
     {
-        echo $twig->render( 'form.html.twig', [] );
+        $secretKey = "6LdgGqIUAAAAAPkIgpUKT6X9O-PaWnPsuqd5A-lb";
+        $ip = $_SERVER[ 'REMOTE_ADDR' ];
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+        $data = [ 'secret' => $secretKey, 'response' => $token ];
+        $options =
+        [
+            'http' =>
+            [
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query($data)
+            ]
+        ];
+        $context = stream_context_create( $options );
+        $response = file_get_contents( $url, false, $context );
+        $responseKeys = json_decode( $response, true );
+        var_dump( $responseKeys );
+        return $responseKeys[ 'success' ] && $responseKeys[ 'score' ] >= 0.5;
     }

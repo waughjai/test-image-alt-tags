@@ -6,7 +6,7 @@
             <h1 class="form-nom">Check the Alt Tags in a Website's Images</h1>
             <h2 class="form-nom2">Enter a Home Page URL</h2>
         </header>
-        <form class="form-form" id="form-form" method="post">
+        <form class="form-form" id="form-form" name="form-form" method="post">
             <input id="form-url" type="text" name="url" required="true">
             <input type="submit" value="Submit" id="form-submit">
             <input type="hidden" name="recaptcha_response" id="recaptchaResponse">
@@ -21,6 +21,7 @@
         'submit',
         function( e )
         {
+            e.preventDefault();
             grecaptcha.ready
             (
                 function()
@@ -31,6 +32,8 @@
                         {
                             var recaptchaResponse = document.getElementById('recaptchaResponse');
                             recaptchaResponse.value = token;
+                            console.log( recaptchaResponse );
+                            document.getElementById( 'form-form' ).submit();
                         }
                     );
                 }
