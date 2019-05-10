@@ -12,7 +12,6 @@ use WaughJ\WebpageLinksList\WebpageLinksList;
 use WaughJ\ImageAltTag\ImageAltTagList;
 use function WaughJ\TestHashItem\TestHashItemExists;
 
-chdir( '../src' );
 echo generateContent();
 
 function generateContent()
@@ -95,7 +94,7 @@ function testURLIsInvalid( string $url ) : bool
 
 function generateTemplate( string $temp, array $data )
 {
-    $twig = new \Twig\Environment( new \Twig\Loader\FilesystemLoader( '../src/templates' ), getTemplateOptions() );
+    $twig = new \Twig\Environment( new \Twig\Loader\FilesystemLoader( 'templates' ), getTemplateOptions() );
     return $twig->render( $temp, $data );
 }
 

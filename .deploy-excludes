@@ -1,5 +1,1 @@
-src/.cache
-.git
-.gitignore
-README.md
-dev
+.cache
