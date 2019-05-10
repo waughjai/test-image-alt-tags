@@ -19,7 +19,7 @@ function generateContent()
 {
     if ( testURLIsDebug() )
     {
-        return generateTemplate( 'results.html.twig', [ 'home' => 'https://4cesi.com', 'webpages' => DEBUG_DATA ] );
+        return generateTemplate( 'results.html.twig', [ 'home' => 'https://4cesi.com', 'webpages' => getDebugData() ] );
     }
     if ( testURLIsNotSet() )
     {
@@ -43,10 +43,23 @@ function generateWebPages( string $url ) : array
     $links = generateLinks( $url );
     foreach ( $links as $link_url => $link_data )
     {
-        $webpages[] = [ 'url' => $link_url, 'alts' => generateAltTagList( $link_data ) ];
+        $links_list = generateAltTagList( $link_data );
+        $webpages[] = [ 'url' => $link_url, 'alts' => $links_list, 'all_valid' => testAllAltTagsValid( $links_list ) ];
     }
     echo json_encode( $webpages );
     return $webpages;
+}
+
+function testAllAltTagsValid( $links_list ) : bool
+{
+    foreach ( $links_list as $link )
+    {
+        if ( !$link->testURLIsInvalid() )
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 function generateLinks( string $url ) : array

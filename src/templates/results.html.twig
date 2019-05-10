@@ -3,8 +3,12 @@
 {% block page %}
     <article class="res">
         <h1 class="nom res-nom">Image Alt Tags for <a href="{{ home }}">{{ home }}</a></h1>
+        <div class="res-btns">
+            <button class="res-btn-i" id="btn-show-only-errors" name="btn-show-only-errors">Show Only Missing Alt Tags</button>
+            <button class="res-btn-i" id="btn-show-all" name="btn-show-all">Show All Alt Tags</button>
+        </div>
         {% for webpage in webpages %}
-            <div class="res-i">
+            <div class="res-i{% if webpage.all_valid %} res-i-all-valid{% endif %}">
                 <h2 class="res-i-nom"><a href="{{ webpage.url }}">{{ webpage.url }}</a></h2>
                 {% if webpage.alts is empty %}
                     <p class="gray">( no images )</p>
@@ -17,6 +21,8 @@
         <footer class="res-foot">
             <a href="index.php">Try another webpage</a>
         </footer>
-
     </article>
+
+    <script src="results.js"></script>
+
 {% endblock %}

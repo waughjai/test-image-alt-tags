@@ -1,0 +1,13 @@
+{
+	"JSFiles":
+	[
+		{
+			"src": [ "recaptcha" ],
+			"dist": "index"
+		},
+		{
+			"src": [ "results" ],
+			"dist": "results"
+		}
+	]
+}

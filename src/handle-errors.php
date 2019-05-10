@@ -3,7 +3,7 @@
 declare( strict_types = 1 );
 namespace WAJAltTags;
 
-const DEBUG = false;
+const DEBUG = true;
 if ( DEBUG )
 {
     ini_set( 'display_errors', '1' );

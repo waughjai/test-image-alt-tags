@@ -1,0 +1,31 @@
+{
+  "name": "test-website-image-alt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/plugin-transform-arrow-functions": "^7.2.0",
+    "@babel/plugin-transform-for-of": "^7.4.3",
+    "@babel/plugin-transform-template-literals": "^7.2.0",
+    "@babel/preset-env": "^7.4.3",
+    "gulp": "^4.0.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-compass": "^2.1.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-plumber": "^1.2.1",
+    "gulp-uglify-es": "^1.0.4",
+    "gulp-watch": "^5.0.1"
+  },
+  "scripts": {
+    "watch": "$( npm bin )/gulp watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "../"
+  },
+  "author": "Jaimeson Waugh",
+  "license": "GPL-3"
+}

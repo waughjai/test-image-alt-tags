@@ -8,12 +8,12 @@
     <tbody>
         {% for alt in webpage.alts %}
             {% if alt.value is null %}
-                <tr>
+                <tr class="invalid-alt">
                     <th class="red left"><a href="{{ alt.src }}">{{ alt.src }}</a></th>
                     <td class="red">[NO ALT]</td>
                 </tr>
             {% else %}
-                <tr>
+                <tr class="valid-alt">
                     <th class="left"><a href="{{ alt.src }}">{{ alt.src }}</a></th>
                     {% if alt.value is empty %}
                         <td class="gray">[EMPTY]</td>

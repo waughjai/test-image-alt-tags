@@ -3,3 +3,8 @@ src/vendor
 composer.lock
 src/.gskey
 dev/.sass-cache
+dev/jsconcat/
+dev/jses5/
+dev/node_modules/
+dev/package-lock.json
+dev/temp/
