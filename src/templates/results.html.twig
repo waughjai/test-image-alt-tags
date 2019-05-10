@@ -2,35 +2,15 @@
 
 {% block page %}
     <article class="res">
-        <h1 class="nom res-nom">Image Alt Tags for {{ home }}</h1>
+        <h1 class="nom res-nom">Image Alt Tags for <a href="{{ home }}">{{ home }}</a></h1>
         {% for webpage in webpages %}
             <div class="res-i">
-                <h2 class="res-i-nom">{{ webpage.url }}</h2>
-                <table class="res-i-tabl">
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Alt Tag</th>
-                        </tr>
-                    </thead>
-                    {% for alt in webpage.alts %}
-                        {% if alt.testIsValid() %}
-                            <tr>
-                                <th class="left">{{ alt.src }}</th>
-                                {% if alt.value is empty %}
-                                    <td class="gray">[EMPTY]</td>
-                                {% else %}
-                                    <td>{{ alt.value }}</td>
-                                {% endif %}
-                            </tr>
-                        {% else %}
-                            <tr>
-                                <th class="red left">{{ alt.src }}</th>
-                                <td class="red">[NO ALT]</td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                </table>
+                <h2 class="res-i-nom"><a href="{{ webpage.url }}">{{ webpage.url }}</a></h2>
+                {% if webpage.alts is empty %}
+                    <p class="gray">( no images )</p>
+                {% else %}
+                    {% include 'partials/alt-table.html.twig' %}
+                {% endif %}
             </div>
         {% endfor %}
 

@@ -5,6 +5,7 @@ namespace WAJAltTags;
 
 require_once( 'handle-errors.php' );
 require_once( 'vendor/autoload.php' ); // Load composer stuff.
+require_once( 'debug.php' );
 require_once( 'test-recaptcha.php' );
 use Enrise\Uri;
 use WaughJ\WebpageLinksList\WebpageLinksList;
@@ -16,6 +17,10 @@ echo generateContent();
 
 function generateContent()
 {
+    if ( testURLIsDebug() )
+    {
+        return generateTemplate( 'results.html.twig', [ 'home' => 'https://4cesi.com', 'webpages' => DEBUG_DATA ] );
+    }
     if ( testURLIsNotSet() )
     {
         return generateTemplate( 'form.html.twig', [] );
@@ -25,7 +30,7 @@ function generateContent()
         $url = getFormattedURL();
         if ( testURLIsInvalid( $url ) )
         {
-            return generateTemplate( 'invalid_url.html.twig', [ 'url' => $url ] );
+            return generateTemplate( 'invalid-url.html.twig', [ 'url' => $url ] );
         }
         return generateTemplate( 'results.html.twig', [ 'home' => $url, 'webpages' => generateWebPages( $url ) ] );
     }
@@ -40,6 +45,7 @@ function generateWebPages( string $url ) : array
     {
         $webpages[] = [ 'url' => $link_url, 'alts' => generateAltTagList( $link_data ) ];
     }
+    echo json_encode( $webpages );
     return $webpages;
 }
 

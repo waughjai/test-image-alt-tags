@@ -4,7 +4,10 @@
 //
 ///////////////////////////////////////////////////////////
 
-    .red
+    .red,
+    .red a:link,
+    .red a:visited,
+    .red a:hover
     {
         color: red;
     }
@@ -42,14 +45,15 @@
 //
 ///////////////////////////////////////////////////////////
 
+    .res-nom
+    {
+        text-align: center;
+        font-size: 2em;
+    }
+
     .res-i
     {
         margin-bottom: 3em;
-    }
-
-    .res-i-nom
-    {
-        border-bottom: 1px solid #000;
     }
 
     .res-i-tabl,

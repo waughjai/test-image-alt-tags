@@ -1,0 +1,27 @@
+<table class="res-i-tabl">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Alt Tag</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for alt in webpage.alts %}
+            {% if alt.value is null %}
+                <tr>
+                    <th class="red left"><a href="{{ alt.src }}">{{ alt.src }}</a></th>
+                    <td class="red">[NO ALT]</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <th class="left"><a href="{{ alt.src }}">{{ alt.src }}</a></th>
+                    {% if alt.value is empty %}
+                        <td class="gray">[EMPTY]</td>
+                    {% else %}
+                        <td>{{ alt.value }}</td>
+                    {% endif %}
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
