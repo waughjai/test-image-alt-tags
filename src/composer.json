@@ -9,7 +9,7 @@
     ],
     "require": {
         "waughj/image-alt-tag": "^0.1.0",
-        "waughj/webpage-links-list": "^0.2.1",
+        "waughj/webpage-links-list": "^0.2.2",
         "twig/twig": "^2.9",
         "waughj/test-hash-item": "^1.1"
     }

@@ -17,7 +17,11 @@
                         {% if alt.testIsValid() %}
                             <tr>
                                 <th class="left">{{ alt.src }}</th>
-                                <td>{{ alt.value }}</td>
+                                {% if alt.value is empty %}
+                                    <td class="gray">[EMPTY]</td>
+                                {% else %}
+                                    <td>{{ alt.value }}</td>
+                                {% endif %}
                             </tr>
                         {% else %}
                             <tr>
