@@ -2,11 +2,14 @@
 
 {% block page %}
     <article class="res">
-        <h1 class="nom res-nom">Image Alt Tags for <a href="{{ home }}">{{ home }}</a></h1>
-        <div class="res-btns">
-            <button class="res-btn-i" id="btn-show-only-errors" name="btn-show-only-errors">Show Only Missing Alt Tags</button>
-            <button class="res-btn-i" id="btn-show-all" name="btn-show-all">Show All Alt Tags</button>
-        </div>
+        <header id="res-head" class="res-head">
+            <h1 class="nom res-nom">Image Alt Tags for <a id="home-url" href="{{ home }}">{{ home }}</a></h1>
+            <div id="res-btns" class="res-btns">
+                <button class="res-btn-i" id="btn-show-only-errors" name="btn-show-only-errors">Show Only Missing Alt Tags</button>
+                <button class="res-btn-i" id="btn-show-all" name="btn-show-all">Show All Alt Tags</button>
+            </div>
+        </header>
+
         {% for webpage in webpages %}
             <div class="res-i{% if webpage.all_valid %} res-i-all-valid{% endif %}">
                 <h2 class="res-i-nom"><a href="{{ webpage.url }}">{{ webpage.url }}</a></h2>
@@ -22,7 +25,5 @@
             <a href="index.php">Try another webpage</a>
         </footer>
     </article>
-
-    <script src="results.js"></script>
-
+    <script>"use strict";!function(){var t="showAllAltTags",e=document.getElementsByClassName("valid-alt"),n=document.getElementsByClassName("res-i-all-valid"),l={showAllAltTags:document.getElementById("btn-show-all"),showOnlyMissingAltTags:document.getElementById("btn-show-only-errors")},a=function(t,e){t.setAttribute("style","display:".concat(e))};Object.keys(l).forEach(function(r){l[r].addEventListener("click",function(l){return function(){if(t!==l){t=l;var r="showOnlyMissingAltTags"===l?"none":"table-row",o=!0,s=!1,i=void 0;try{for(var c,d=n[Symbol.iterator]();!(o=(c=d.next()).done);o=!0){var u=c.value;a(u,r)}}catch(t){s=!0,i=t}finally{try{o||null==d.return||d.return()}finally{if(s)throw i}}var m=!0,y=!1,h=void 0;try{for(var f,v=e[Symbol.iterator]();!(m=(f=v.next()).done);m=!0){var g=f.value;a(g,r)}}catch(t){y=!0,h=t}finally{try{m||null==v.return||v.return()}finally{if(y)throw h}}}}}(r))})}(),function(){var t=document.getElementById("home-url").innerHTML.replace(/http(s)?:\/\//g,""),e=document.getElementById("res-head"),n="<!DOCTYPE html>".concat(document.getElementById("html").outerHTML),l="data:application/octet-stream;charset=utf-16;base64,".concat(btoa(n)),a=document.createElement("div");a.setAttribute("class","res-download");var r=document.createElement("a");r.setAttribute("href",l),r.setAttribute("download","".concat(t,".img-alt-tags.html")),r.setAttribute("class","res-download-link"),r.innerHTML="Download",a.appendChild(r),e.appendChild(a)}();</script>
 {% endblock %}

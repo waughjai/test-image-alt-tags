@@ -46,7 +46,6 @@ function generateWebPages( string $url ) : array
         $links_list = generateAltTagList( $link_data );
         $webpages[] = [ 'url' => $link_url, 'alts' => $links_list, 'all_valid' => testAllAltTagsValid( $links_list ) ];
     }
-    echo json_encode( $webpages );
     return $webpages;
 }
 
@@ -54,7 +53,7 @@ function testAllAltTagsValid( $links_list ) : bool
 {
     foreach ( $links_list as $link )
     {
-        if ( !$link->testURLIsInvalid() )
+        if ( !$link->testIsValid() )
         {
             return false;
         }
@@ -96,6 +95,12 @@ function testURLIsInvalid( string $url ) : bool
 
 function generateTemplate( string $temp, array $data )
 {
-    $twig = new \Twig\Environment( new \Twig\Loader\FilesystemLoader( '../src/templates' ), [] );
+    $twig = new \Twig\Environment( new \Twig\Loader\FilesystemLoader( '../src/templates' ), getTemplateOptions() );
     return $twig->render( $temp, $data );
+}
+
+function getTemplateOptions() : array
+{
+    // Don't want to deal with cache poisoning while debugging.
+    return ( DEBUG ) ? [] : [ 'cache' => '.cache' ];
 }

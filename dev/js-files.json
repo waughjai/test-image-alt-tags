@@ -6,7 +6,7 @@
 			"dist": "index"
 		},
 		{
-			"src": [ "results" ],
+			"src": [ "hide-valid-alt", "download" ],
 			"dist": "results"
 		}
 	]
